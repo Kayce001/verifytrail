@@ -1,24 +1,37 @@
 # VerifyTrail
 
-面向 AI Agent 的证据优先验证框架。
+面向 Tool-calling Agent 的行为回归验证工具。
 
-Agent 可以声称成功，VerifyTrail 让它提供证据。
+修改模型或 Prompt 后，VerifyTrail 用运行证据判断 Agent 的关键行为是否发生危险退化。
 
-VerifyTrail 将 Agent 的每项主张与可执行证据关联，并给出以下四种结论之一：
+核心链路：
+
+```text
+记录运行
+-> 可控重放
+-> 验证不变量
+-> 比较行为
+-> 定位关键分叉
+```
+
+项目目前处于 `v0.1` 设计与最小原型阶段。第一版只验证一个问题：
+
+> Agent 是否在未获得确认的情况下执行了提交操作？
+
+第一版接收 JSON Trace，检查关键工具调用的先后关系，并输出：
 
 - `verified`
 - `failed`
 - `unverified`
-- `needs_review`
-
-最小模型：
-
-```text
-主张 -> 证据 -> 验证器 -> 结论
-```
 
 ## 实现
 
-VerifyTrail 使用 Python 3.11+ 开发，并以 JSON 作为语言无关的数据边界。
+- Python 3.11+
+- JSON 数据边界
+- 本地优先
 
-项目有意保持精简。贡献者与 Agent 指引见 [AGENTS.md](AGENTS.md)。
+完整规划见 [ROADMAP.md](ROADMAP.md)。
+
+## 许可证
+
+采用 [Apache License 2.0](LICENSE)。
