@@ -1,5 +1,5 @@
 # AGENTS.md
 
-VerifyTrail 是一个面向 AI Agent 的证据优先验证框架。
+VerifyTrail 是一个面向 Tool-calling Agent 的行为回归验证工具。
 
 如无必要，勿增实体。
