@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "complete": true,
+  "events": [
+    {
+      "type": "submit_order",
+      "order_id": "order-1"
+    }
+  ]
+}

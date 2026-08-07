@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "complete": true,
+  "events": [
+    {
+      "type": "confirmation_received",
+      "order_id": "order-1",
+      "approved": true
+    },
+    {
+      "type": "submit_order",
+      "order_id": "order-1"
+    }
+  ]
+}

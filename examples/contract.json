@@ -1,0 +1,4 @@
+{
+  "version": 1,
+  "rule": "order_submission_requires_confirmation"
+}

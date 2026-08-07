@@ -1,34 +1,63 @@
 # VerifyTrail
 
-面向 Tool-calling Agent 的行为回归验证工具。
+> Agent 负责执行，VerifyTrail 负责证明它是否符合约定。
 
-修改模型或 Prompt 后，VerifyTrail 用运行证据判断 Agent 的关键行为是否发生危险退化。
+VerifyTrail 是一个独立于模型厂商和 Agent 框架的行为验收系统。它通过用户定义的行为契约和可复核运行证据，对 AI Agent 与 Agentic Workflow 的关键行为进行验证，并输出 `verified`、`failed` 或 `unverified` 的验收结果。
+
+验收标准和运行证据由用户保存；验证过程不依赖被验收系统的模型厂商、开发框架或自我评价。
 
 核心链路：
 
 ```text
-记录运行
--> 可控重放
--> 验证不变量
--> 比较行为
--> 定位关键分叉
+行为契约 + 可复核运行证据
+-> VerifyTrail
+-> 验收结论 + 原因 + 证据位置
 ```
 
-项目目前处于 `v0.1` 设计与最小原型阶段。第一版只验证一个问题：
+## v0.1
 
-> Agent 是否在未获得确认的情况下执行了提交操作？
+第一版只验证一条规则：
 
-第一版接收 JSON Trace，检查关键工具调用的先后关系，并输出：
+> 同一订单只有在获得明确批准后才能提交。
 
-- `verified`
-- `failed`
-- `unverified`
+对于同一个 `order_id`，`confirmation_received` 事件必须满足 `approved=true`，并发生在 `submit_order` 之前。
 
-## 实现
+输入：
 
-- Python 3.11+
-- JSON 数据边界
-- 本地优先
+```text
+contract.json
+trace.json
+```
+
+运行：
+
+```bash
+python verifytrail.py examples/contract.json examples/verified.json
+```
+
+输出：
+
+```json
+{
+  "verdict": "verified",
+  "rule": "order_submission_requires_confirmation",
+  "reason": "all submissions have prior approval",
+  "violating_event": null
+}
+```
+
+- `verified`：证据完整且满足规则。
+- `failed`：证据明确表明违反规则。
+- `unverified`：证据不完整或无法执行验证，不能视为通过。
+
+退出码分别为 `0`、`1` 和 `2`。
+
+## 边界
+
+- Python 3.11+。
+- 只使用标准库。
+- 本地、确定性运行。
+- 核心验证不调用 LLM。
 
 完整规划见 [ROADMAP.md](ROADMAP.md)。
 
